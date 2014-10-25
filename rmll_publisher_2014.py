@@ -86,14 +86,17 @@ class RmllPublisher(object):
             zipfile_obj.write(metacast_path, "metadata.xml")
         finally:
             zipfile_obj.close()
-        # Upload ZIP file to MediaServer
-        result = self.upload_zip(zipfile_path)
-        if not result:
-            print >>sys.stderr, "Upload of media %s failed!" % os.path.basename(path)
-        # Clean files
-        if CLEAN:
-            os.remove(metacast_path)
-            os.remove(zipfile_path)
+        # Upload ZIP file to MediaServer confirmation
+        print "Upload %s ([Y/n]) ?" % metadata["title"]
+        confirm_upload = raw_input().lower()
+        if confirm_upload == "" or confirm_upload == "y":
+	        result = self.upload_zip(zipfile_path)
+	        if not result:
+	            print >>sys.stderr, "Upload of media %s failed!" % os.path.basename(path)
+	        # Clean files
+	        if CLEAN:
+	            os.remove(metacast_path)
+	            os.remove(zipfile_path)
     
     def get_video_resources(self, files):
         low = list()
